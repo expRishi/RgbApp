@@ -1,36 +1,59 @@
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { TouchableOpacity, FlatList } from 'react-native';
 import {  View, Text, StyleSheet, Alert } from 'react-native';
 
 
 const RgbComponent = () => {
 
+    const [newColor, setnewColor] = useState([]);
     const dataGenarate = () => {
         let red = Math.floor(Math.random() * 256 );
         let green = Math.floor(Math.random() * 256 );
         let blue = Math.floor(Math.random() * 256 );
         return `rgb(${red},${green},${blue})`;
-    }
+    };
+
+    //console.log(newColor);
 
     return (
     <View style={styles.viewStyle}>
         <TouchableOpacity
             style={styles.buttonStyle}
             onPress={ () => {
-                Alert.alert(dataGenarate());
+                //Alert.alert(dataGenarate());
+                setnewColor([...newColor, dataGenarate()]);
             }}>
             <Text style={styles.textStyle}>
                 Genarate Random Color
             </Text>
         </TouchableOpacity>
-        <View style={styles.imgContainer}>
-            <Text style={{
-                backgroundColor: "rgb(212,12,178)",
-                width: 100,
-                height: 100,
-                borderRadius: 5,
-            }}>
-            </Text>
+        <View style={styles.flatView}>
+            <FlatList 
+                data={newColor}
+                renderItem={( {item} ) => {
+                    return(
+                        <View style={styles.imgContainer}>
+                            
+                            <View
+                                style={{
+                                backgroundColor: item,
+                                width: 300,
+                                height: 100,
+                                borderRadius: 5,
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}>
+                                <Text style={{
+                                    fontSize: 30,
+                                    fontWeight: 900,
+                                }}>
+                                {item}
+                                </Text>
+                            </View>
+                        </View>
+                    );
+                }}
+            />
         </View>
     </View>
     );
@@ -55,10 +78,15 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 900
     },
+    flatView: {
+        alignItems: "center",
+        marginBottom: 100
+    },
     imgContainer: {
         marginVertical: 50,
         paddingHorizontal: 30,
         display: "flex",
+        alignSelf: "center"
     },
 })
 
